@@ -75,6 +75,10 @@ export class UsersService {
       },
     });
 
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado!');
+    }
+
     delete user.created_at;
     delete user.updated_at;
 

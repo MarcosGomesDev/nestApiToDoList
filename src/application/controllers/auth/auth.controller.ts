@@ -1,11 +1,14 @@
+import { CreateUserDto } from '@application/dtos/create-user.dto';
 import { AuthService } from '@application/services/auth/auth.service';
 import {
+  Body,
   Controller,
   HttpCode,
   HttpStatus,
   Post,
   Request,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { IsPublic } from 'src/auth/decorators/is-public.decorator';
 import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
@@ -21,5 +24,11 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(@Request() req: AuthRequest) {
     return this.authService.login(req.user);
+  }
+
+  @IsPublic()
+  @Post('register')
+  async register(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
+    return this.authService.register(createUserDto);
   }
 }
